@@ -1,5 +1,6 @@
 package com.example.hw2.fragments
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,15 +22,23 @@ class ImageListFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_image_list, container, false)
 
-        val recyclerView : RecyclerView = container!!.findViewById(R.id.rv_images)
+        var imagesPerRow : Int
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            imagesPerRow = horizontalLayoutItemsNum
+        } else {
+            imagesPerRow = verticalLayoutItemsNum
+        }
+
+        val recyclerView : RecyclerView = view.findViewById(R.id.rv_images)
         val rvAdapter = ImageListRVAdapter(imagePlates)
         recyclerView.adapter = rvAdapter
-        recyclerView.layoutManager = GridLayoutManager(context, 3)
+        recyclerView.layoutManager = GridLayoutManager(context, imagesPerRow)
 
         val btnAddition : FloatingActionButton = view.findViewById(R.id.image_add_btn)
 
         btnAddition.setOnClickListener {
-            val imagePlate = ImagePlate(null)
+            val imagePlate = ImagePlate("https://loremflickr.com/320/240/kitten")
             rvAdapter.addImagePlate(imagePlate)
         }
 
@@ -39,5 +48,7 @@ class ImageListFragment : Fragment() {
 
     companion object {
         val imagePlates = mutableListOf<ImagePlate>()
+        const val horizontalLayoutItemsNum = 3
+        const val verticalLayoutItemsNum = 2
     }
 }

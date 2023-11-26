@@ -18,5 +18,11 @@ class MainActivity : AppCompatActivity() {
 
         val imagesBoard : Fragment = ImageListFragment()
 
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_container_view, imagesBoard)
+            addToBackStack(null)
+            commit()
+        }
+
     }
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.hw2.R
 import com.example.hw2.classes.ImagePlate
 
@@ -19,7 +20,19 @@ class ImageListRVAdapter(
 
         // Bind item view with object
         fun bind(imagePlate : ImagePlate) {
-            Glide.with(itemView).load("https://goo.gl/gEgYUd").into(imageView);
+            if (imagePlate.url != null) {
+                Glide.with(itemView)
+                    .load(imagePlate.url)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    //.thumbnail(Glide.with(itemView).load(R.drawable.image_loading))
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .into(imageView);
+            }
+            else {
+                imageView.setImageResource(R.drawable.default_image)
+            }
         }
     }
 
