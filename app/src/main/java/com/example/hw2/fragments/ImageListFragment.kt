@@ -12,6 +12,7 @@ import com.example.hw2.R
 import com.example.hw2.adapters.ImageListRVAdapter
 import com.example.hw2.classes.ImagePlate
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlin.random.Random
 
 class ImageListFragment : Fragment() {
 
@@ -31,14 +32,16 @@ class ImageListFragment : Fragment() {
         }
 
         val recyclerView : RecyclerView = view.findViewById(R.id.rv_images)
-        val rvAdapter = ImageListRVAdapter(imagePlates)
+        val rvAdapter = ImageListRVAdapter(context, imagePlates)
         recyclerView.adapter = rvAdapter
         recyclerView.layoutManager = GridLayoutManager(context, imagesPerRow)
 
         val btnAddition : FloatingActionButton = view.findViewById(R.id.image_add_btn)
 
+        val random : Random = Random
+
         btnAddition.setOnClickListener {
-            val imagePlate = ImagePlate("https://loremflickr.com/320/240/kitten")
+            val imagePlate = ImagePlate(random.nextInt(1000) + 1)
             rvAdapter.addImagePlate(imagePlate)
         }
 
