@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 //import coil.load
 import com.bumptech.glide.Glide
@@ -25,62 +26,79 @@ class ImageListRVAdapter(
 ) : RecyclerView.Adapter<ImageListRVAdapter.RvViewHolder>() {
 
     // Describes an item view and its metadata inside the recycler view
-    class RvViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class RvViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView : ImageView = itemView.findViewById(R.id.image_plate)
 
         // Bind item view with object
         fun bind(imagePlate : ImagePlate) {
             if (imagePlate.url != null) {
-                Glide.with(imageView)
-                    .load(imagePlate.url)
-                    .placeholder(R.drawable.image_loading)
-                    .error(R.drawable.image_loading)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable,
-                            model: Any,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-
-                    })
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .transition(withCrossFade())
-                    .into(imageView);
-                /*
-                Glide.with(imageView)
-                    .load(imagePlate.url)
-                    .placeholder(R.drawable.image_loading)
-                    .timeout(3000)
-                    .error(R.drawable.image_loading)
-                    //.skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    //.thumbnail(Glide.with(itemView).load(R.drawable.image_loading))
-                    .transition(withCrossFade())
-                    .into(imageView);
-                 */
-                /*
-                imageView.load(imagePlate.url) {
-                    placeholder(R.drawable.image_loading)
-                    error(R.drawable.image_loading)
-                }
-                 */
+                loadImage(imagePlate)
             }
             else {
                 imageView.setImageResource(R.drawable.default_image)
             }
+
+            imageView.setOnClickListener() {
+                if (imagePlate.isLoaded)
+                {
+                    // Open image
+                }
+                else {
+                    loadImage(imagePlate)
+                }
+            }
+        }
+
+        private fun loadImage(imagePlate : ImagePlate) {
+            Glide.with(context!!)
+                .load(imagePlate.url)
+                .placeholder(placeHolderImage)
+                .error(errorImage)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        val toast = Toast.makeText(imageView.context, "Failed to load image", Toast.LENGTH_SHORT)
+                        toast.show()
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        imagePlate.isLoaded = true
+                        return false
+                    }
+
+                })
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(withCrossFade())
+                .into(imageView);
+            /*
+            Glide.with(imageView)
+                .load(imagePlate.url)
+                .placeholder(R.drawable.image_loading)
+                .timeout(3000)
+                .error(R.drawable.image_loading)
+                //.skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.thumbnail(Glide.with(itemView).load(R.drawable.image_loading))
+                .transition(withCrossFade())
+                .into(imageView);
+             */
+            /*
+            imageView.load(imagePlate.url) {
+                placeholder(R.drawable.image_loading)
+                error(R.drawable.image_loading)
+            }
+             */
         }
     }
 
@@ -103,7 +121,8 @@ class ImageListRVAdapter(
     }
 
     companion object {
-
+        val placeHolderImage = R.drawable.image_loading
+        val errorImage = R.drawable.image_error
     }
 
 }
