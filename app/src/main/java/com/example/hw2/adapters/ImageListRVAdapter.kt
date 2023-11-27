@@ -1,15 +1,14 @@
 package com.example.hw2.adapters
 
 import android.content.Context
-import android.content.pm.Signature
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-//import coil.load
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -19,6 +18,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.hw2.R
 import com.example.hw2.classes.ImagePlate
+import com.example.hw2.classes.RetrofitController
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ImageListRVAdapter(
     val context : Context?,
@@ -78,27 +80,11 @@ class ImageListRVAdapter(
                     }
 
                 })
+                .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(true)
                 .transition(withCrossFade())
                 .into(imageView);
-            /*
-            Glide.with(imageView)
-                .load(imagePlate.url)
-                .placeholder(R.drawable.image_loading)
-                .timeout(3000)
-                .error(R.drawable.image_loading)
-                //.skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                //.thumbnail(Glide.with(itemView).load(R.drawable.image_loading))
-                .transition(withCrossFade())
-                .into(imageView);
-             */
-            /*
-            imageView.load(imagePlate.url) {
-                placeholder(R.drawable.image_loading)
-                error(R.drawable.image_loading)
-            }
-             */
         }
     }
 
