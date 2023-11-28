@@ -1,8 +1,6 @@
 package com.example.hw2.adapters
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +16,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.hw2.R
 import com.example.hw2.classes.ImagePlate
-import com.example.hw2.classes.RetrofitController
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ImageListRVAdapter(
-    val context : Context?,
     private val imagePlates: MutableList<ImagePlate>
 ) : RecyclerView.Adapter<ImageListRVAdapter.RvViewHolder>() {
 
@@ -52,7 +46,7 @@ class ImageListRVAdapter(
         }
 
         private fun loadImage(imagePlate : ImagePlate) {
-            Glide.with(context!!)
+            Glide.with(imageView)
                 .load(imagePlate.url)
                 .placeholder(placeHolderImage)
                 .error(errorImage)
