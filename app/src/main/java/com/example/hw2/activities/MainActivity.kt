@@ -22,9 +22,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /* Error fragment is not destroyed
     override fun onDestroy() {
         super.onDestroy()
         cacheDir.delete()
         Glide.get(imagesBoard.requireContext()).clearDiskCache()
     }
+    */
 }
