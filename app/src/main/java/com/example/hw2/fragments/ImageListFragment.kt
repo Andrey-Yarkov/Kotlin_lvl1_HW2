@@ -15,8 +15,10 @@ import com.example.hw2.adapters.ImageListRVAdapter
 import com.example.hw2.classes.ImagePlate
 import com.example.hw2.classes.RetrofitController
 import com.example.hw2.files.ImageResult
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -47,7 +49,7 @@ class ImageListFragment : Fragment() {
 
         btnKittenAddition.setOnClickListener {
             val retrofitController : RetrofitController = RetrofitController(kittenImageBaseUrl)
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
                 val imageResult = retrofitController.requestKittenImage()
                 processImageResult(imageResult)
             }
@@ -55,7 +57,7 @@ class ImageListFragment : Fragment() {
 
         btnMonkeyAddition.setOnClickListener {
             val retrofitController : RetrofitController = RetrofitController(monkeyImageBaseUrl)
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
                 val imageResult = retrofitController.requestMonkeyImage()
                 processImageResult(imageResult)
             }
@@ -65,27 +67,35 @@ class ImageListFragment : Fragment() {
         return view
     }
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, e ->
+        MainScope().launch {
+            setError(e.message ?: e.toString())
+        }
+    }
+
     private suspend fun processImageResult(imageResult: ImageResult) {
         withContext(Dispatchers.Main) {
             when (imageResult) {
-                is ImageResult.Ok -> {
-                    val url : String? = imageResult.image.getImageUrl()
-                    if (url != null) {
-                        val imagePlate : ImagePlate = ImagePlate(url)
-                        rvAdapter.addImagePlate(imagePlate)
-                    } else
-                    {
-                        val toast = Toast.makeText(context, "Cannot retrieve image URL", Toast.LENGTH_SHORT)
-                        toast.show()
-                    }
-                }
-
-                is ImageResult.Error -> {
-                    val toast = Toast.makeText(context, "Failed to load picture", Toast.LENGTH_SHORT)
-                    toast.show()
+                is ImageResult.Ok -> { setImage(imageResult.image.getImageUrl()) }
+                is ImageResult.Error -> { setError(imageResult.error) }
                 }
             }
         }
+
+    private fun setImage(url : String?) {
+        if (url != null) {
+            val imagePlate : ImagePlate = ImagePlate(url)
+            rvAdapter.addImagePlate(imagePlate)
+        } else
+        {
+            val toast = Toast.makeText(context, "Cannot retrieve image URL", Toast.LENGTH_SHORT)
+            toast.show()
+        }
+    }
+
+    private fun setError(error : String) {
+        val toast = Toast.makeText(context, error, Toast.LENGTH_SHORT)
+        toast.show()
     }
 
     companion object {
