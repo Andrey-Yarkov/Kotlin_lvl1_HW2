@@ -1,4 +1,4 @@
-package com.example.hw2.files
+package com.example.hw2.internet_access_module
 
 import com.google.gson.annotations.SerializedName
 
@@ -28,7 +28,7 @@ sealed interface MonkeyImageResult {
 }
 
 data class MonkeyImage(
-    @SerializedName("data") var data : MonkeyImage.MonkeyDataField? = MonkeyImage.MonkeyDataField()
+    @SerializedName("data") var data : MonkeyDataField? = MonkeyDataField()
 ) : Image()  {
     override fun getImageUrl() : String? { return data?.images?.original?.url }
 

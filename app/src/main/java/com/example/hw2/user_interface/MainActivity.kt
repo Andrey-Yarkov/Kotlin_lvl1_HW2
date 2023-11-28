@@ -1,11 +1,9 @@
-package com.example.hw2.activities
+package com.example.hw2.user_interface
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.example.hw2.R
-import com.example.hw2.fragments.ImageListFragment
 
 class MainActivity : AppCompatActivity() {
 

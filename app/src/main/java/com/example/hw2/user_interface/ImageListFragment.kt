@@ -1,4 +1,4 @@
-package com.example.hw2.fragments
+package com.example.hw2.user_interface
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -11,10 +11,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hw2.R
-import com.example.hw2.adapters.ImageListRVAdapter
-import com.example.hw2.classes.ImagePlate
-import com.example.hw2.classes.RetrofitController
-import com.example.hw2.files.ImageResult
+import com.example.hw2.image_processing_module.ImageListRVAdapter
+import com.example.hw2.image_processing_module.ImagePlate
+import com.example.hw2.internet_access_module.RetrofitController
+import com.example.hw2.internet_access_module.ImageResult
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

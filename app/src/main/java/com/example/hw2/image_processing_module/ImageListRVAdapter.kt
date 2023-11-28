@@ -1,4 +1,4 @@
-package com.example.hw2.adapters
+package com.example.hw2.image_processing_module
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -15,7 +15,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.hw2.R
-import com.example.hw2.classes.ImagePlate
 
 class ImageListRVAdapter(
     private val imagePlates: MutableList<ImagePlate>

@@ -1,10 +1,5 @@
-package com.example.hw2.classes
+package com.example.hw2.internet_access_module
 
-import com.example.hw2.files.ImageResult
-import com.example.hw2.files.MonkeyImageResult
-import com.example.hw2.files.RequestController
-import com.example.hw2.interfaces.KittenImageApi
-import com.example.hw2.interfaces.MonkeyImageApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
