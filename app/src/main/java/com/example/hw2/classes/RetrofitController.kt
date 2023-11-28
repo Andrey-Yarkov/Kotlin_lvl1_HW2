@@ -1,13 +1,12 @@
 package com.example.hw2.classes
 
+import com.example.hw2.files.ImageResult
+import com.example.hw2.files.MonkeyImageResult
 import com.example.hw2.files.RequestController
-import com.example.hw2.files.Result
-import com.example.hw2.interfaces.GifApi
-import retrofit2.CallAdapter.Factory
-import retrofit2.Response
+import com.example.hw2.interfaces.KittenImageApi
+import com.example.hw2.interfaces.MonkeyImageApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.system.exitProcess
 
 class RetrofitController(api : String) : RequestController {
 
@@ -16,16 +15,28 @@ class RetrofitController(api : String) : RequestController {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val gifApi = retrofit.create(GifApi::class.java)
+    private val kittenImageApi = retrofit.create(KittenImageApi::class.java)
+    private val monkeyImageApi = retrofit.create(MonkeyImageApi::class.java)
 
-    override suspend fun requestGif() : Result {
-        val response = gifApi.gif()
+    override suspend fun requestKittenImage() : ImageResult {
+        val response = kittenImageApi.image()
         return if (response.isSuccessful) {
             response.body()?.let {
-                Result.Ok(it)
-            } ?: Result.Error("Empty Gif")
+                ImageResult.Ok(it[0])
+            } ?: ImageResult.Error("Empty Picture")
         } else {
-            Result.Error(response.code().toString())
+            ImageResult.Error(response.code().toString())
+        }
+    }
+
+    override suspend fun requestMonkeyImage() : ImageResult {
+        val response = monkeyImageApi.image()
+        return if (response.isSuccessful) {
+            response.body()?.let {
+                ImageResult.Ok(it)
+            } ?: ImageResult.Error("Empty Gif")
+        } else {
+            ImageResult.Error(response.code().toString())
         }
     }
 }

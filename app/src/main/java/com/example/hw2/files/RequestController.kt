@@ -1,39 +1,44 @@
 package com.example.hw2.files
 
-import com.example.hw2.classes.ImagePlate
 import com.google.gson.annotations.SerializedName
-import retrofit2.Response
-import retrofit2.http.GET
 
 interface RequestController {
-    suspend fun requestGif() : Result
+    suspend fun requestKittenImage() : ImageResult
+    suspend fun requestMonkeyImage() : ImageResult
 }
 
-sealed interface Result {
-    data class Ok(val gif : Gif) : Result
-    data class Error(val error : String) : Result
+sealed interface ImageResult {
+    data class Ok(val image : Image) : ImageResult
+    data class Error(val error : String) : ImageResult
 }
 
-data class Gif (
-    @SerializedName("data") var data : Data? = Data()
-)
+abstract class Image () {
+    abstract fun getImageUrl() : String?
+}
 
-data class Data (
-    @SerializedName("images") var images : Images? = Images()
-)
-
-data class Images (
-    @SerializedName("original") var original : Original? = Original()
-)
-
-data class Original (
+data class KittenImage(
     @SerializedName("url") var url: String? = null
-)
+) : Image()  {
+    override fun getImageUrl() : String? { return url }
+}
 
-val apiRequest = mapOf(
-    "base" to "https://api.giphy.com/v1/gifs/",
-    "type" to "random",
-    "api_key" to "0UTRbFtkMxAplrohufYco5IY74U8hOes",
-    "tag" to "fail",
-    "rating" to "g"
-)
+sealed interface MonkeyImageResult {
+    data class Ok(val monkeyImage : MonkeyImage) : MonkeyImageResult
+    data class Error(val error : String) : MonkeyImageResult
+}
+
+data class MonkeyImage(
+    @SerializedName("data") var data : MonkeyImage.MonkeyDataField? = MonkeyImage.MonkeyDataField()
+) : Image()  {
+    override fun getImageUrl() : String? { return data?.images?.original?.url }
+
+    data class MonkeyDataField (
+        @SerializedName("images") var images : MonkeyImagesField? = MonkeyImagesField()
+    )
+    data class MonkeyImagesField (
+        @SerializedName("original") var original : MonkeyOriginalField? = MonkeyOriginalField()
+    )
+    data class MonkeyOriginalField (
+        @SerializedName("url") var url: String? = null
+    )
+}
