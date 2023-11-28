@@ -1,8 +1,5 @@
 package com.example.hw2.classes
 
-import android.media.Image
-
-open class ImagePlate(val url : String?) {
-    //val url : String? = "https://loremflickr.com/320/240/kitten?lock=$index"
+class ImagePlate(val url : String?) {
     var isLoaded : Boolean = false
 }
