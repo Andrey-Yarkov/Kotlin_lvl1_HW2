@@ -3,4 +3,5 @@
     <string name="heading_text">Random images</string>
     <string name="left_btn_text">Add kitten</string>
     <string name="right_btn_text">Add monkey</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

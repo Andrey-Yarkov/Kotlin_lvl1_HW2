@@ -40,7 +40,7 @@ class ImageListFragment : Fragment() {
         }
 
         val recyclerView : RecyclerView = view.findViewById(R.id.rv_images)
-        rvAdapter = ImageListRVAdapter(imagePlates)
+        rvAdapter = ImageListRVAdapter(imagePlates, this)
         recyclerView.adapter = rvAdapter
         recyclerView.layoutManager = GridLayoutManager(context, imagesPerRow)
 
@@ -65,6 +65,17 @@ class ImageListFragment : Fragment() {
 
         // Inflate the layout for this fragment
         return view
+    }
+
+    fun onItemClickListener(url : String?) {
+        val activity = requireActivity()
+        activity.supportFragmentManager.beginTransaction().apply {
+            val bundle : Bundle = Bundle()
+            bundle.putString("url", url)
+            replace(R.id.fragment_container_view, ImageFragment().apply{ arguments = bundle })
+            addToBackStack(null)
+            commit()
+        }
     }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, e ->
@@ -105,7 +116,7 @@ class ImageListFragment : Fragment() {
         const val verticalLayoutItemsNum = 2
         const val kittenImageBaseUrl = "https://api.thecatapi.com"
         const val monkeyImageBaseUrl = "https://api.giphy.com"
-        const val kittenImageRequest = "https://api.thecatapi.com/v1/images/search"
+        const val kittenImageRequest = "/v1/images/search"
         const val monkeyImageRequest = "/v1/gifs/random?api_key=0UTRbFtkMxAplrohufYco5IY74U8hOes&tag=monkey&rating=g"
     }
 }

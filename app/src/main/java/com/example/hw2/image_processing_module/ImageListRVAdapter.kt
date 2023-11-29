@@ -15,9 +15,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.hw2.R
+import com.example.hw2.user_interface.ImageListFragment
 
 class ImageListRVAdapter(
-    private val imagePlates: MutableList<ImagePlate>
+    private val imagePlates: MutableList<ImagePlate>,
+    private val listener : ImageListFragment
 ) : RecyclerView.Adapter<ImageListRVAdapter.RvViewHolder>() {
 
     // Describes an item view and its metadata inside the recycler view
@@ -36,7 +38,7 @@ class ImageListRVAdapter(
             imageView.setOnClickListener() {
                 if (imagePlate.isLoaded)
                 {
-                    // Open image
+                    listener.onItemClickListener(imagePlate.url)
                 }
                 else {
                     loadImage(imagePlate)
